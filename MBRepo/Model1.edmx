@@ -1,0 +1,581 @@
+﻿<?xml version="1.0" encoding="utf-8"?>
+<edmx:Edmx Version="3.0" xmlns:edmx="http://schemas.microsoft.com/ado/2009/11/edmx">
+  <!-- EF Runtime content -->
+  <edmx:Runtime>
+    <!-- SSDL content -->
+    <edmx:StorageModels>
+      <Schema Namespace="GVentesModel.Store" Provider="System.Data.SqlClient" ProviderManifestToken="2012" Alias="Self" xmlns:store="http://schemas.microsoft.com/ado/2007/12/edm/EntityStoreSchemaGenerator" xmlns:customannotation="http://schemas.microsoft.com/ado/2013/11/edm/customannotation" xmlns="http://schemas.microsoft.com/ado/2009/11/edm/ssdl">
+        <EntityType Name="Archive_Client">
+          <Key>
+            <PropertyRef Name="ID" />
+          </Key>
+          <Property Name="ID" Type="varchar" MaxLength="50" Nullable="false" />
+          <Property Name="Nom" Type="varchar" MaxLength="50" Nullable="false" />
+          <Property Name="Prenom" Type="varchar" MaxLength="50" Nullable="false" />
+          <Property Name="Date_De_Naissance" Type="date" Nullable="false" />
+          <Property Name="Ville" Type="varchar" MaxLength="50" Nullable="false" />
+        </EntityType>
+        <EntityType Name="Client">
+          <Key>
+            <PropertyRef Name="ID" />
+          </Key>
+          <Property Name="ID" Type="varchar" MaxLength="50" Nullable="false" />
+          <Property Name="Nom" Type="varchar" MaxLength="50" Nullable="false" />
+          <Property Name="Prenom" Type="varchar" MaxLength="50" Nullable="false" />
+          <Property Name="Date_De_Naissance" Type="date" Nullable="false" />
+          <Property Name="Ville" Type="varchar" MaxLength="50" Nullable="false" />
+        </EntityType>
+        <EntityType Name="Commande">
+          <Key>
+            <PropertyRef Name="ID" />
+          </Key>
+          <Property Name="ID" Type="varchar" MaxLength="50" Nullable="false" />
+          <Property Name="CLT" Type="varchar" MaxLength="50" Nullable="false" />
+          <Property Name="PRD" Type="varchar" MaxLength="50" Nullable="false" />
+          <Property Name="Date" Type="date" Nullable="false" />
+          <Property Name="PRU" Type="money" Nullable="false" />
+          <Property Name="QTE" Type="int" Nullable="false" />
+        </EntityType>
+        <EntityType Name="Det_Fact">
+          <Key>
+            <PropertyRef Name="ID" />
+          </Key>
+          <Property Name="ID" Type="int" StoreGeneratedPattern="Identity" Nullable="false" />
+          <Property Name="CMD" Type="varchar" MaxLength="50" Nullable="false" />
+          <Property Name="FACT" Type="varchar" MaxLength="50" Nullable="false" />
+        </EntityType>
+        <EntityType Name="Facture">
+          <Key>
+            <PropertyRef Name="ID" />
+          </Key>
+          <Property Name="ID" Type="varchar" MaxLength="50" Nullable="false" />
+          <Property Name="Date" Type="date" Nullable="false" />
+          <Property Name="CLT" Type="varchar" MaxLength="50" Nullable="false" />
+        </EntityType>
+        <EntityType Name="Login">
+          <Key>
+            <PropertyRef Name="Username" />
+          </Key>
+          <Property Name="Username" Type="varchar" MaxLength="50" Nullable="false" />
+          <Property Name="Password" Type="varchar" MaxLength="50" Nullable="false" />
+        </EntityType>
+        <EntityType Name="Produit">
+          <Key>
+            <PropertyRef Name="REF" />
+          </Key>
+          <Property Name="REF" Type="varchar" MaxLength="50" Nullable="false" />
+          <Property Name="Desi" Type="varchar" MaxLength="50" Nullable="false" />
+          <Property Name="PRU" Type="money" Nullable="false" />
+        </EntityType>
+        <EntityType Name="Reglement">
+          <Key>
+            <PropertyRef Name="ID" />
+          </Key>
+          <Property Name="ID" Type="varchar" MaxLength="50" Nullable="false" />
+          <Property Name="FACT" Type="varchar" MaxLength="50" Nullable="false" />
+          <Property Name="Date" Type="date" Nullable="false" />
+          <Property Name="Montant" Type="money" Nullable="false" />
+          <Property Name="Type_Reg" Type="varchar" MaxLength="50" Nullable="false" />
+        </EntityType>
+        <EntityType Name="Stock">
+          <Key>
+            <PropertyRef Name="PRD" />
+          </Key>
+          <Property Name="PRD" Type="varchar" MaxLength="50" Nullable="false" />
+          <Property Name="QTE" Type="int" />
+        </EntityType>
+        <EntityType Name="sysdiagrams">
+          <Key>
+            <PropertyRef Name="diagram_id" />
+          </Key>
+          <Property Name="name" Type="nvarchar" MaxLength="128" Nullable="false" />
+          <Property Name="principal_id" Type="int" Nullable="false" />
+          <Property Name="diagram_id" Type="int" StoreGeneratedPattern="Identity" Nullable="false" />
+          <Property Name="version" Type="int" />
+          <Property Name="definition" Type="varbinary(max)" />
+        </EntityType>
+        <Association Name="FK_Commande_Client">
+          <End Role="Client" Type="Self.Client" Multiplicity="1" />
+          <End Role="Commande" Type="Self.Commande" Multiplicity="*" />
+          <ReferentialConstraint>
+            <Principal Role="Client">
+              <PropertyRef Name="ID" />
+            </Principal>
+            <Dependent Role="Commande">
+              <PropertyRef Name="CLT" />
+            </Dependent>
+          </ReferentialConstraint>
+        </Association>
+        <Association Name="FK_Commande_Produit">
+          <End Role="Produit" Type="Self.Produit" Multiplicity="1" />
+          <End Role="Commande" Type="Self.Commande" Multiplicity="*" />
+          <ReferentialConstraint>
+            <Principal Role="Produit">
+              <PropertyRef Name="REF" />
+            </Principal>
+            <Dependent Role="Commande">
+              <PropertyRef Name="PRD" />
+            </Dependent>
+          </ReferentialConstraint>
+        </Association>
+        <Association Name="FK_Det_Fact_Commande">
+          <End Role="Commande" Type="Self.Commande" Multiplicity="1" />
+          <End Role="Det_Fact" Type="Self.Det_Fact" Multiplicity="*" />
+          <ReferentialConstraint>
+            <Principal Role="Commande">
+              <PropertyRef Name="ID" />
+            </Principal>
+            <Dependent Role="Det_Fact">
+              <PropertyRef Name="CMD" />
+            </Dependent>
+          </ReferentialConstraint>
+        </Association>
+        <Association Name="FK_Det_Fact_Facture">
+          <End Role="Facture" Type="Self.Facture" Multiplicity="1" />
+          <End Role="Det_Fact" Type="Self.Det_Fact" Multiplicity="*" />
+          <ReferentialConstraint>
+            <Principal Role="Facture">
+              <PropertyRef Name="ID" />
+            </Principal>
+            <Dependent Role="Det_Fact">
+              <PropertyRef Name="FACT" />
+            </Dependent>
+          </ReferentialConstraint>
+        </Association>
+        <Association Name="FK_Facture_Client">
+          <End Role="Client" Type="Self.Client" Multiplicity="1" />
+          <End Role="Facture" Type="Self.Facture" Multiplicity="*" />
+          <ReferentialConstraint>
+            <Principal Role="Client">
+              <PropertyRef Name="ID" />
+            </Principal>
+            <Dependent Role="Facture">
+              <PropertyRef Name="CLT" />
+            </Dependent>
+          </ReferentialConstraint>
+        </Association>
+        <Association Name="FK_Reglement_Facture">
+          <End Role="Facture" Type="Self.Facture" Multiplicity="1" />
+          <End Role="Reglement" Type="Self.Reglement" Multiplicity="*" />
+          <ReferentialConstraint>
+            <Principal Role="Facture">
+              <PropertyRef Name="ID" />
+            </Principal>
+            <Dependent Role="Reglement">
+              <PropertyRef Name="FACT" />
+            </Dependent>
+          </ReferentialConstraint>
+        </Association>
+        <Association Name="FK_Stock_Produit">
+          <End Role="Produit" Type="Self.Produit" Multiplicity="1" />
+          <End Role="Stock" Type="Self.Stock" Multiplicity="0..1" />
+          <ReferentialConstraint>
+            <Principal Role="Produit">
+              <PropertyRef Name="REF" />
+            </Principal>
+            <Dependent Role="Stock">
+              <PropertyRef Name="PRD" />
+            </Dependent>
+          </ReferentialConstraint>
+        </Association>
+        <EntityContainer Name="GVentesModelStoreContainer">
+          <EntitySet Name="Archive_Client" EntityType="Self.Archive_Client" Schema="dbo" store:Type="Tables" />
+          <EntitySet Name="Client" EntityType="Self.Client" Schema="dbo" store:Type="Tables" />
+          <EntitySet Name="Commande" EntityType="Self.Commande" Schema="dbo" store:Type="Tables" />
+          <EntitySet Name="Det_Fact" EntityType="Self.Det_Fact" Schema="dbo" store:Type="Tables" />
+          <EntitySet Name="Facture" EntityType="Self.Facture" Schema="dbo" store:Type="Tables" />
+          <EntitySet Name="Login" EntityType="Self.Login" Schema="dbo" store:Type="Tables" />
+          <EntitySet Name="Produit" EntityType="Self.Produit" Schema="dbo" store:Type="Tables" />
+          <EntitySet Name="Reglement" EntityType="Self.Reglement" Schema="dbo" store:Type="Tables" />
+          <EntitySet Name="Stock" EntityType="Self.Stock" Schema="dbo" store:Type="Tables" />
+          <EntitySet Name="sysdiagrams" EntityType="Self.sysdiagrams" Schema="dbo" store:Type="Tables" />
+          <AssociationSet Name="FK_Commande_Client" Association="Self.FK_Commande_Client">
+            <End Role="Client" EntitySet="Client" />
+            <End Role="Commande" EntitySet="Commande" />
+          </AssociationSet>
+          <AssociationSet Name="FK_Commande_Produit" Association="Self.FK_Commande_Produit">
+            <End Role="Produit" EntitySet="Produit" />
+            <End Role="Commande" EntitySet="Commande" />
+          </AssociationSet>
+          <AssociationSet Name="FK_Det_Fact_Commande" Association="Self.FK_Det_Fact_Commande">
+            <End Role="Commande" EntitySet="Commande" />
+            <End Role="Det_Fact" EntitySet="Det_Fact" />
+          </AssociationSet>
+          <AssociationSet Name="FK_Det_Fact_Facture" Association="Self.FK_Det_Fact_Facture">
+            <End Role="Facture" EntitySet="Facture" />
+            <End Role="Det_Fact" EntitySet="Det_Fact" />
+          </AssociationSet>
+          <AssociationSet Name="FK_Facture_Client" Association="Self.FK_Facture_Client">
+            <End Role="Client" EntitySet="Client" />
+            <End Role="Facture" EntitySet="Facture" />
+          </AssociationSet>
+          <AssociationSet Name="FK_Reglement_Facture" Association="Self.FK_Reglement_Facture">
+            <End Role="Facture" EntitySet="Facture" />
+            <End Role="Reglement" EntitySet="Reglement" />
+          </AssociationSet>
+          <AssociationSet Name="FK_Stock_Produit" Association="Self.FK_Stock_Produit">
+            <End Role="Produit" EntitySet="Produit" />
+            <End Role="Stock" EntitySet="Stock" />
+          </AssociationSet>
+        </EntityContainer>
+      </Schema>
+    </edmx:StorageModels>
+    <!-- CSDL content -->
+    <edmx:ConceptualModels>
+      <Schema Namespace="GVentesModel" Alias="Self" annotation:UseStrongSpatialTypes="false" xmlns:annotation="http://schemas.microsoft.com/ado/2009/02/edm/annotation" xmlns:customannotation="http://schemas.microsoft.com/ado/2013/11/edm/customannotation" xmlns="http://schemas.microsoft.com/ado/2009/11/edm">
+        <EntityType Name="Archive_Client">
+          <Key>
+            <PropertyRef Name="ID" />
+          </Key>
+          <Property Name="ID" Type="String" MaxLength="50" FixedLength="false" Unicode="false" Nullable="false" />
+          <Property Name="Nom" Type="String" MaxLength="50" FixedLength="false" Unicode="false" Nullable="false" />
+          <Property Name="Prenom" Type="String" MaxLength="50" FixedLength="false" Unicode="false" Nullable="false" />
+          <Property Name="Date_De_Naissance" Type="DateTime" Nullable="false" Precision="0" />
+          <Property Name="Ville" Type="String" MaxLength="50" FixedLength="false" Unicode="false" Nullable="false" />
+        </EntityType>
+        <EntityType Name="Client">
+          <Key>
+            <PropertyRef Name="ID" />
+          </Key>
+          <Property Name="ID" Type="String" MaxLength="50" FixedLength="false" Unicode="false" Nullable="false" />
+          <Property Name="Nom" Type="String" MaxLength="50" FixedLength="false" Unicode="false" Nullable="false" />
+          <Property Name="Prenom" Type="String" MaxLength="50" FixedLength="false" Unicode="false" Nullable="false" />
+          <Property Name="Date_De_Naissance" Type="DateTime" Nullable="false" Precision="0" />
+          <Property Name="Ville" Type="String" MaxLength="50" FixedLength="false" Unicode="false" Nullable="false" />
+          <NavigationProperty Name="Commande" Relationship="Self.FK_Commande_Client" FromRole="Client" ToRole="Commande" />
+          <NavigationProperty Name="Facture" Relationship="Self.FK_Facture_Client" FromRole="Client" ToRole="Facture" />
+        </EntityType>
+        <EntityType Name="Commande">
+          <Key>
+            <PropertyRef Name="ID" />
+          </Key>
+          <Property Name="ID" Type="String" MaxLength="50" FixedLength="false" Unicode="false" Nullable="false" />
+          <Property Name="CLT" Type="String" MaxLength="50" FixedLength="false" Unicode="false" Nullable="false" />
+          <Property Name="PRD" Type="String" MaxLength="50" FixedLength="false" Unicode="false" Nullable="false" />
+          <Property Name="Date" Type="DateTime" Nullable="false" Precision="0" />
+          <Property Name="PRU" Type="Decimal" Precision="19" Scale="4" Nullable="false" />
+          <Property Name="QTE" Type="Int32" Nullable="false" />
+          <NavigationProperty Name="Client" Relationship="Self.FK_Commande_Client" FromRole="Commande" ToRole="Client" />
+          <NavigationProperty Name="Produit" Relationship="Self.FK_Commande_Produit" FromRole="Commande" ToRole="Produit" />
+          <NavigationProperty Name="Det_Fact" Relationship="Self.FK_Det_Fact_Commande" FromRole="Commande" ToRole="Det_Fact" />
+        </EntityType>
+        <EntityType Name="Det_Fact">
+          <Key>
+            <PropertyRef Name="ID" />
+          </Key>
+          <Property Name="ID" Type="Int32" Nullable="false" annotation:StoreGeneratedPattern="Identity" />
+          <Property Name="CMD" Type="String" MaxLength="50" FixedLength="false" Unicode="false" Nullable="false" />
+          <Property Name="FACT" Type="String" MaxLength="50" FixedLength="false" Unicode="false" Nullable="false" />
+          <NavigationProperty Name="Commande" Relationship="Self.FK_Det_Fact_Commande" FromRole="Det_Fact" ToRole="Commande" />
+          <NavigationProperty Name="Facture" Relationship="Self.FK_Det_Fact_Facture" FromRole="Det_Fact" ToRole="Facture" />
+        </EntityType>
+        <EntityType Name="Facture">
+          <Key>
+            <PropertyRef Name="ID" />
+          </Key>
+          <Property Name="ID" Type="String" MaxLength="50" FixedLength="false" Unicode="false" Nullable="false" />
+          <Property Name="Date" Type="DateTime" Nullable="false" Precision="0" />
+          <Property Name="CLT" Type="String" MaxLength="50" FixedLength="false" Unicode="false" Nullable="false" />
+          <NavigationProperty Name="Client" Relationship="Self.FK_Facture_Client" FromRole="Facture" ToRole="Client" />
+          <NavigationProperty Name="Det_Fact" Relationship="Self.FK_Det_Fact_Facture" FromRole="Facture" ToRole="Det_Fact" />
+          <NavigationProperty Name="Reglement" Relationship="Self.FK_Reglement_Facture" FromRole="Facture" ToRole="Reglement" />
+        </EntityType>
+        <EntityType Name="Login">
+          <Key>
+            <PropertyRef Name="Username" />
+          </Key>
+          <Property Name="Username" Type="String" MaxLength="50" FixedLength="false" Unicode="false" Nullable="false" />
+          <Property Name="Password" Type="String" MaxLength="50" FixedLength="false" Unicode="false" Nullable="false" />
+        </EntityType>
+        <EntityType Name="Produit">
+          <Key>
+            <PropertyRef Name="REF" />
+          </Key>
+          <Property Name="REF" Type="String" MaxLength="50" FixedLength="false" Unicode="false" Nullable="false" />
+          <Property Name="Desi" Type="String" MaxLength="50" FixedLength="false" Unicode="false" Nullable="false" />
+          <Property Name="PRU" Type="Decimal" Precision="19" Scale="4" Nullable="false" />
+          <NavigationProperty Name="Commande" Relationship="Self.FK_Commande_Produit" FromRole="Produit" ToRole="Commande" />
+          <NavigationProperty Name="Stock" Relationship="Self.FK_Stock_Produit" FromRole="Produit" ToRole="Stock" />
+        </EntityType>
+        <EntityType Name="Reglement">
+          <Key>
+            <PropertyRef Name="ID" />
+          </Key>
+          <Property Name="ID" Type="String" MaxLength="50" FixedLength="false" Unicode="false" Nullable="false" />
+          <Property Name="FACT" Type="String" MaxLength="50" FixedLength="false" Unicode="false" Nullable="false" />
+          <Property Name="Date" Type="DateTime" Nullable="false" Precision="0" />
+          <Property Name="Montant" Type="Decimal" Precision="19" Scale="4" Nullable="false" />
+          <Property Name="Type_Reg" Type="String" MaxLength="50" FixedLength="false" Unicode="false" Nullable="false" />
+          <NavigationProperty Name="Facture" Relationship="Self.FK_Reglement_Facture" FromRole="Reglement" ToRole="Facture" />
+        </EntityType>
+        <EntityType Name="Stock">
+          <Key>
+            <PropertyRef Name="PRD" />
+          </Key>
+          <Property Name="PRD" Type="String" MaxLength="50" FixedLength="false" Unicode="false" Nullable="false" />
+          <Property Name="QTE" Type="Int32" />
+          <NavigationProperty Name="Produit" Relationship="Self.FK_Stock_Produit" FromRole="Stock" ToRole="Produit" />
+        </EntityType>
+        <EntityType Name="sysdiagrams">
+          <Key>
+            <PropertyRef Name="diagram_id" />
+          </Key>
+          <Property Name="name" Type="String" MaxLength="128" FixedLength="false" Unicode="true" Nullable="false" />
+          <Property Name="principal_id" Type="Int32" Nullable="false" />
+          <Property Name="diagram_id" Type="Int32" Nullable="false" annotation:StoreGeneratedPattern="Identity" />
+          <Property Name="version" Type="Int32" />
+          <Property Name="definition" Type="Binary" MaxLength="Max" FixedLength="false" />
+        </EntityType>
+        <Association Name="FK_Commande_Client">
+          <End Role="Client" Type="Self.Client" Multiplicity="1" />
+          <End Role="Commande" Type="Self.Commande" Multiplicity="*" />
+          <ReferentialConstraint>
+            <Principal Role="Client">
+              <PropertyRef Name="ID" />
+            </Principal>
+            <Dependent Role="Commande">
+              <PropertyRef Name="CLT" />
+            </Dependent>
+          </ReferentialConstraint>
+        </Association>
+        <Association Name="FK_Facture_Client">
+          <End Role="Client" Type="Self.Client" Multiplicity="1" />
+          <End Role="Facture" Type="Self.Facture" Multiplicity="*" />
+          <ReferentialConstraint>
+            <Principal Role="Client">
+              <PropertyRef Name="ID" />
+            </Principal>
+            <Dependent Role="Facture">
+              <PropertyRef Name="CLT" />
+            </Dependent>
+          </ReferentialConstraint>
+        </Association>
+        <Association Name="FK_Commande_Produit">
+          <End Role="Produit" Type="Self.Produit" Multiplicity="1" />
+          <End Role="Commande" Type="Self.Commande" Multiplicity="*" />
+          <ReferentialConstraint>
+            <Principal Role="Produit">
+              <PropertyRef Name="REF" />
+            </Principal>
+            <Dependent Role="Commande">
+              <PropertyRef Name="PRD" />
+            </Dependent>
+          </ReferentialConstraint>
+        </Association>
+        <Association Name="FK_Det_Fact_Commande">
+          <End Role="Commande" Type="Self.Commande" Multiplicity="1" />
+          <End Role="Det_Fact" Type="Self.Det_Fact" Multiplicity="*" />
+          <ReferentialConstraint>
+            <Principal Role="Commande">
+              <PropertyRef Name="ID" />
+            </Principal>
+            <Dependent Role="Det_Fact">
+              <PropertyRef Name="CMD" />
+            </Dependent>
+          </ReferentialConstraint>
+        </Association>
+        <Association Name="FK_Det_Fact_Facture">
+          <End Role="Facture" Type="Self.Facture" Multiplicity="1" />
+          <End Role="Det_Fact" Type="Self.Det_Fact" Multiplicity="*" />
+          <ReferentialConstraint>
+            <Principal Role="Facture">
+              <PropertyRef Name="ID" />
+            </Principal>
+            <Dependent Role="Det_Fact">
+              <PropertyRef Name="FACT" />
+            </Dependent>
+          </ReferentialConstraint>
+        </Association>
+        <Association Name="FK_Reglement_Facture">
+          <End Role="Facture" Type="Self.Facture" Multiplicity="1" />
+          <End Role="Reglement" Type="Self.Reglement" Multiplicity="*" />
+          <ReferentialConstraint>
+            <Principal Role="Facture">
+              <PropertyRef Name="ID" />
+            </Principal>
+            <Dependent Role="Reglement">
+              <PropertyRef Name="FACT" />
+            </Dependent>
+          </ReferentialConstraint>
+        </Association>
+        <Association Name="FK_Stock_Produit">
+          <End Role="Produit" Type="Self.Produit" Multiplicity="1" />
+          <End Role="Stock" Type="Self.Stock" Multiplicity="0..1" />
+          <ReferentialConstraint>
+            <Principal Role="Produit">
+              <PropertyRef Name="REF" />
+            </Principal>
+            <Dependent Role="Stock">
+              <PropertyRef Name="PRD" />
+            </Dependent>
+          </ReferentialConstraint>
+        </Association>
+        <EntityContainer Name="GVentesEntities" annotation:LazyLoadingEnabled="true">
+          <EntitySet Name="Archive_Client" EntityType="Self.Archive_Client" />
+          <EntitySet Name="Client" EntityType="Self.Client" />
+          <EntitySet Name="Commande" EntityType="Self.Commande" />
+          <EntitySet Name="Det_Fact" EntityType="Self.Det_Fact" />
+          <EntitySet Name="Facture" EntityType="Self.Facture" />
+          <EntitySet Name="Login" EntityType="Self.Login" />
+          <EntitySet Name="Produit" EntityType="Self.Produit" />
+          <EntitySet Name="Reglement" EntityType="Self.Reglement" />
+          <EntitySet Name="Stock" EntityType="Self.Stock" />
+          <EntitySet Name="sysdiagrams" EntityType="Self.sysdiagrams" />
+          <AssociationSet Name="FK_Commande_Client" Association="Self.FK_Commande_Client">
+            <End Role="Client" EntitySet="Client" />
+            <End Role="Commande" EntitySet="Commande" />
+          </AssociationSet>
+          <AssociationSet Name="FK_Facture_Client" Association="Self.FK_Facture_Client">
+            <End Role="Client" EntitySet="Client" />
+            <End Role="Facture" EntitySet="Facture" />
+          </AssociationSet>
+          <AssociationSet Name="FK_Commande_Produit" Association="Self.FK_Commande_Produit">
+            <End Role="Produit" EntitySet="Produit" />
+            <End Role="Commande" EntitySet="Commande" />
+          </AssociationSet>
+          <AssociationSet Name="FK_Det_Fact_Commande" Association="Self.FK_Det_Fact_Commande">
+            <End Role="Commande" EntitySet="Commande" />
+            <End Role="Det_Fact" EntitySet="Det_Fact" />
+          </AssociationSet>
+          <AssociationSet Name="FK_Det_Fact_Facture" Association="Self.FK_Det_Fact_Facture">
+            <End Role="Facture" EntitySet="Facture" />
+            <End Role="Det_Fact" EntitySet="Det_Fact" />
+          </AssociationSet>
+          <AssociationSet Name="FK_Reglement_Facture" Association="Self.FK_Reglement_Facture">
+            <End Role="Facture" EntitySet="Facture" />
+            <End Role="Reglement" EntitySet="Reglement" />
+          </AssociationSet>
+          <AssociationSet Name="FK_Stock_Produit" Association="Self.FK_Stock_Produit">
+            <End Role="Produit" EntitySet="Produit" />
+            <End Role="Stock" EntitySet="Stock" />
+          </AssociationSet>
+        </EntityContainer>
+      </Schema>
+    </edmx:ConceptualModels>
+    <!-- C-S mapping content -->
+    <edmx:Mappings>
+      <Mapping Space="C-S" xmlns="http://schemas.microsoft.com/ado/2009/11/mapping/cs">
+        <EntityContainerMapping StorageEntityContainer="GVentesModelStoreContainer" CdmEntityContainer="GVentesEntities">
+          <EntitySetMapping Name="Archive_Client">
+            <EntityTypeMapping TypeName="GVentesModel.Archive_Client">
+              <MappingFragment StoreEntitySet="Archive_Client">
+                <ScalarProperty Name="ID" ColumnName="ID" />
+                <ScalarProperty Name="Nom" ColumnName="Nom" />
+                <ScalarProperty Name="Prenom" ColumnName="Prenom" />
+                <ScalarProperty Name="Date_De_Naissance" ColumnName="Date_De_Naissance" />
+                <ScalarProperty Name="Ville" ColumnName="Ville" />
+              </MappingFragment>
+            </EntityTypeMapping>
+          </EntitySetMapping>
+          <EntitySetMapping Name="Client">
+            <EntityTypeMapping TypeName="GVentesModel.Client">
+              <MappingFragment StoreEntitySet="Client">
+                <ScalarProperty Name="ID" ColumnName="ID" />
+                <ScalarProperty Name="Nom" ColumnName="Nom" />
+                <ScalarProperty Name="Prenom" ColumnName="Prenom" />
+                <ScalarProperty Name="Date_De_Naissance" ColumnName="Date_De_Naissance" />
+                <ScalarProperty Name="Ville" ColumnName="Ville" />
+              </MappingFragment>
+            </EntityTypeMapping>
+          </EntitySetMapping>
+          <EntitySetMapping Name="Commande">
+            <EntityTypeMapping TypeName="GVentesModel.Commande">
+              <MappingFragment StoreEntitySet="Commande">
+                <ScalarProperty Name="ID" ColumnName="ID" />
+                <ScalarProperty Name="CLT" ColumnName="CLT" />
+                <ScalarProperty Name="PRD" ColumnName="PRD" />
+                <ScalarProperty Name="Date" ColumnName="Date" />
+                <ScalarProperty Name="PRU" ColumnName="PRU" />
+                <ScalarProperty Name="QTE" ColumnName="QTE" />
+              </MappingFragment>
+            </EntityTypeMapping>
+          </EntitySetMapping>
+          <EntitySetMapping Name="Det_Fact">
+            <EntityTypeMapping TypeName="GVentesModel.Det_Fact">
+              <MappingFragment StoreEntitySet="Det_Fact">
+                <ScalarProperty Name="ID" ColumnName="ID" />
+                <ScalarProperty Name="CMD" ColumnName="CMD" />
+                <ScalarProperty Name="FACT" ColumnName="FACT" />
+              </MappingFragment>
+            </EntityTypeMapping>
+          </EntitySetMapping>
+          <EntitySetMapping Name="Facture">
+            <EntityTypeMapping TypeName="GVentesModel.Facture">
+              <MappingFragment StoreEntitySet="Facture">
+                <ScalarProperty Name="ID" ColumnName="ID" />
+                <ScalarProperty Name="Date" ColumnName="Date" />
+                <ScalarProperty Name="CLT" ColumnName="CLT" />
+              </MappingFragment>
+            </EntityTypeMapping>
+          </EntitySetMapping>
+          <EntitySetMapping Name="Login">
+            <EntityTypeMapping TypeName="GVentesModel.Login">
+              <MappingFragment StoreEntitySet="Login">
+                <ScalarProperty Name="Username" ColumnName="Username" />
+                <ScalarProperty Name="Password" ColumnName="Password" />
+              </MappingFragment>
+            </EntityTypeMapping>
+          </EntitySetMapping>
+          <EntitySetMapping Name="Produit">
+            <EntityTypeMapping TypeName="GVentesModel.Produit">
+              <MappingFragment StoreEntitySet="Produit">
+                <ScalarProperty Name="REF" ColumnName="REF" />
+                <ScalarProperty Name="Desi" ColumnName="Desi" />
+                <ScalarProperty Name="PRU" ColumnName="PRU" />
+              </MappingFragment>
+            </EntityTypeMapping>
+          </EntitySetMapping>
+          <EntitySetMapping Name="Reglement">
+            <EntityTypeMapping TypeName="GVentesModel.Reglement">
+              <MappingFragment StoreEntitySet="Reglement">
+                <ScalarProperty Name="ID" ColumnName="ID" />
+                <ScalarProperty Name="FACT" ColumnName="FACT" />
+                <ScalarProperty Name="Date" ColumnName="Date" />
+                <ScalarProperty Name="Montant" ColumnName="Montant" />
+                <ScalarProperty Name="Type_Reg" ColumnName="Type_Reg" />
+              </MappingFragment>
+            </EntityTypeMapping>
+          </EntitySetMapping>
+          <EntitySetMapping Name="Stock">
+            <EntityTypeMapping TypeName="GVentesModel.Stock">
+              <MappingFragment StoreEntitySet="Stock">
+                <ScalarProperty Name="PRD" ColumnName="PRD" />
+                <ScalarProperty Name="QTE" ColumnName="QTE" />
+              </MappingFragment>
+            </EntityTypeMapping>
+          </EntitySetMapping>
+          <EntitySetMapping Name="sysdiagrams">
+            <EntityTypeMapping TypeName="GVentesModel.sysdiagrams">
+              <MappingFragment StoreEntitySet="sysdiagrams">
+                <ScalarProperty Name="name" ColumnName="name" />
+                <ScalarProperty Name="principal_id" ColumnName="principal_id" />
+                <ScalarProperty Name="diagram_id" ColumnName="diagram_id" />
+                <ScalarProperty Name="version" ColumnName="version" />
+                <ScalarProperty Name="definition" ColumnName="definition" />
+              </MappingFragment>
+            </EntityTypeMapping>
+          </EntitySetMapping>
+        </EntityContainerMapping>
+      </Mapping>
+    </edmx:Mappings>
+  </edmx:Runtime>
+  <!-- EF Designer content (DO NOT EDIT MANUALLY BELOW HERE) -->
+  <Designer xmlns="http://schemas.microsoft.com/ado/2009/11/edmx">
+    <Connection>
+      <DesignerInfoPropertySet>
+        <DesignerProperty Name="MetadataArtifactProcessing" Value="EmbedInOutputAssembly" />
+      </DesignerInfoPropertySet>
+    </Connection>
+    <Options>
+      <DesignerInfoPropertySet>
+        <DesignerProperty Name="ValidateOnBuild" Value="true" />
+        <DesignerProperty Name="EnablePluralization" Value="false" />
+        <DesignerProperty Name="IncludeForeignKeysInModel" Value="true" />
+        <DesignerProperty Name="UseLegacyProvider" Value="false" />
+        <DesignerProperty Name="CodeGenerationStrategy" Value="None" />
+      </DesignerInfoPropertySet>
+    </Options>
+    <!-- Diagram content (shape and connector positions) -->
+    <Diagrams></Diagrams>
+  </Designer>
+</edmx:Edmx>
