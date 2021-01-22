@@ -15,7 +15,7 @@ namespace MBRepo
 
         void Insert<TEntity>(TEntity record) where TEntity : class;
 
-        void InsertRange<TEntity>(List<TEntity> records) where TEntity : class;
+        void InsertRange<TEntity>(List<TEntity> records) where TEntity:class;
 
         void Delete<TEntity>(TEntity record) where TEntity : class;
 

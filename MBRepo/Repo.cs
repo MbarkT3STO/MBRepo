@@ -10,10 +10,20 @@ namespace MBRepo
     public class Repo<TContext> : IRepo<TContext> where TContext : DbContext, new()
     {
 
+
+        #region Repository properties
+
         /// <summary>
         /// Private DBContext property
         /// </summary>
         private DbContext _Context { get; } = null;
+        
+
+        #endregion
+
+
+
+
 
 
         #region Construcors
@@ -22,9 +32,11 @@ namespace MBRepo
         {
             _Context = new TContext();
         }
-        
+
 
         #endregion
+
+
 
 
 
