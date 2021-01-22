@@ -10,7 +10,7 @@ namespace MBRepo
     interface IRepo<Tcontext> where  Tcontext : DbContext
     {
         void GetAll<Table>();
-        void GetOne<Table>(object pkValue);
+        //void GetOne<Table>(object pkValue);
 
     }
 }
