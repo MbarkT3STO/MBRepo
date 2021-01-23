@@ -10,13 +10,20 @@ namespace MBRepo
     public class Repo<TContext> : IRepo<TContext> where TContext : DbContext, new()
     {
 
+        
+
+        #region Repository properties
+
 
         #region Repository properties
 
         /// <summary>
         /// Private DBContext property
         /// </summary>
-        private DbContext _Context { get; } = null;
+        private DbContext _Context { get; } = null;        
+
+        #endregion
+
         
 
         #endregion
@@ -90,6 +97,31 @@ namespace MBRepo
         {
             return Task.Factory.StartNew(() => GetOne<TEntity>(pkValue));
         }
+
+
+
+
+
+        #region Preview feature
+
+
+         /// <summary>
+        /// Get Many records from a table based on a property value
+        /// </summary>
+        /// <typeparam name="TEntity">The entity to select from</typeparam>
+        /// <param name="prop">The property used in the condition</param>
+        /// <param name="val">The value that will used in the search</param>
+        /// <returns></returns>
+        public IEnumerable<TEntity> GetMany<TEntity>(string prop, object val) where TEntity : class
+        {
+            return _Context.Set<TEntity>().AsEnumerable()
+                           .Where(x => typeof(TEntity).GetProperty(prop).GetValue(x, null).ToString()
+                                                      .Contains(val.ToString())).ToList();
+        }       
+
+        #endregion
+
+
 
 
         #endregion

@@ -64,36 +64,39 @@ namespace MBRepo
             //--------------------------------------------------
             //Insert a range of client records into Client table
             //---------------------------------------------------
-           // var clts = new List<Client>()
-           //            {
-           //                new Client()
-           //                {
-           //                    ID                = "CLT-X",
-           //                    Nom               = "xxxx",
-           //                    Prenom            = "xxxx",
-           //                    Ville             = "Casa",
-           //                    Date_De_Naissance = DateTime.Today
-           //                },
-           //                new Client()
-           //                {
-           //                    ID                = "CLT-XX",
-           //                    Nom               = "xxxx",
-           //                    Prenom            = "xxxx",
-           //                    Ville             = "Agadir",
-           //                    Date_De_Naissance = DateTime.Today
-           //                }
-           //            };
+            // var clts = new List<Client>()
+            //            {
+            //                new Client()
+            //                {
+            //                    ID                = "CLT-X",
+            //                    Nom               = "xxxx",
+            //                    Prenom            = "xxxx",
+            //                    Ville             = "Casa",
+            //                    Date_De_Naissance = DateTime.Today
+            //                },
+            //                new Client()
+            //                {
+            //                    ID                = "CLT-XX",
+            //                    Nom               = "xxxx",
+            //                    Prenom            = "xxxx",
+            //                    Ville             = "Agadir",
+            //                    Date_De_Naissance = DateTime.Today
+            //                }
+            //            };
 
-           //await repo.InsertRangeAsync(clts);
-           // repo.Save();
-           // Console.WriteLine("Done !");
-
-
+            //await repo.InsertRangeAsync(clts);
+            // repo.Save();
+            // Console.WriteLine("Done !");
 
 
 
 
+            var R = repo.GetMany<Client>(typeof(Client).GetProperty("Ville").Name, "Agadir");
 
+            foreach (var c in R)
+            {
+                Console.WriteLine($"{c.ID} {c.Nom} {c.Ville}");
+            }
 
 
 
