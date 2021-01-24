@@ -63,7 +63,7 @@ namespace MBRepo
 
             //--------------------------------------------------
             //Insert a range of client records into Client table
-            //---------------------------------------------------
+            //--------------------------------------------------
             // var clts = new List<Client>()
             //            {
             //                new Client()
@@ -90,15 +90,29 @@ namespace MBRepo
 
 
 
+            //--------------------------------------------------
+            //Get many
+            //--------------------------------------------------
+            //var R = repo.GetMany<Client>(typeof(Client).GetProperty("Ville").Name, "Agadir");
 
-            var R = repo.GetMany<Client>(typeof(Client).GetProperty("Ville").Name, "Agadir");
-
-            foreach (var c in R)
-            {
-                Console.WriteLine($"{c.ID} {c.Nom} {c.Ville}");
-            }
+            //foreach (var c in R)
+            //{
+            //    Console.WriteLine($"{c.ID} {c.Nom} {c.Ville}");
+            //}
 
 
+            //--------------------------------------------------
+            //Contains
+            //--------------------------------------------------
+            var R = repo.GetOne<Client>("CLT-9");
+
+            Client c = new Client()
+                       {
+                           ID                = R.ID, Nom = R.Nom, Prenom = R.Prenom, Ville = R.Ville,
+                           Date_De_Naissance = R.Date_De_Naissance
+                       };
+
+            Console.WriteLine(await repo.ContainsAsync<Client,ClientComparer>(c));
 
             Console.ReadKey();
 

@@ -7,6 +7,8 @@
 // </auto-generated>
 //------------------------------------------------------------------------------
 
+using System.Collections;
+
 namespace MBRepo
 {
     using System;
@@ -31,5 +33,27 @@ namespace MBRepo
         public virtual ICollection<Commande> Commande { get; set; }
         [System.Diagnostics.CodeAnalysis.SuppressMessage("Microsoft.Usage", "CA2227:CollectionPropertiesShouldBeReadOnly")]
         public virtual ICollection<Facture> Facture { get; set; }
+    }
+
+
+    public class ClientComparer : IEqualityComparer<Client>
+    {
+        public bool Equals(Client o1, Client o2)
+        {
+            if (o1.ID==o2.ID)
+            {
+                return true;
+            }
+            else
+            {
+                return false;
+            }
+        }
+
+
+        public int GetHashCode(Client Obj)
+        {
+            return Obj.GetHashCode();
+        }
     }
 }
