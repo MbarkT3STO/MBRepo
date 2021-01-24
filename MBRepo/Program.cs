@@ -1,6 +1,8 @@
 ﻿using System;
 using System.Collections.Generic;
+using System.Data.Entity;
 using System.Linq;
+using System.Security.Cryptography.X509Certificates;
 using System.Text;
 using System.Threading.Tasks;
 
@@ -11,7 +13,7 @@ namespace MBRepo
         static async Task Main(string[] args)
         {
 
-            var repo = new Repo<GVentesEntities>();
+            var repo = new Repo<GVentesEntities>(false);
 
             //----------------
             //Get COMMANDES
@@ -54,7 +56,6 @@ namespace MBRepo
             //              Ville             = "Agadir",
             //              Date_De_Naissance = DateTime.Today
             //          };
-
             //repo.Insert(clt);
             //repo.Save();
             //Console.WriteLine("Done !");
@@ -83,7 +84,6 @@ namespace MBRepo
             //                    Date_De_Naissance = DateTime.Today
             //                }
             //            };
-
             //await repo.InsertRangeAsync(clts);
             // repo.Save();
             // Console.WriteLine("Done !");
@@ -94,7 +94,6 @@ namespace MBRepo
             //Get many
             //--------------------------------------------------
             //var R = repo.GetMany<Client>(typeof(Client).GetProperty("Ville").Name, "Agadir");
-
             //foreach (var c in R)
             //{
             //    Console.WriteLine($"{c.ID} {c.Nom} {c.Ville}");
@@ -104,15 +103,31 @@ namespace MBRepo
             //--------------------------------------------------
             //Contains
             //--------------------------------------------------
-            var R = repo.GetOne<Client>("CLT-9");
+            //var R = repo.GetOne<Client>("CLT-9");
+            //Client c = new Client()
+            //           {
+            //               ID                = R.ID, Nom = R.Nom, Prenom = R.Prenom, Ville = R.Ville,
+            //               Date_De_Naissance = R.Date_De_Naissance
+            //           };
+            //Console.WriteLine(await repo.ContainsAsync<Client,ClientComparer>(c));
 
-            Client c = new Client()
-                       {
-                           ID                = R.ID, Nom = R.Nom, Prenom = R.Prenom, Ville = R.Ville,
-                           Date_De_Naissance = R.Date_De_Naissance
-                       };
 
-            Console.WriteLine(await repo.ContainsAsync<Client,ClientComparer>(c));
+
+
+            //--------------------------------------------------
+            //Eager loading as Join
+            //--------------------------------------------------
+            var db = new GVentesEntities();
+
+            var R = db.Client.Include(cmd => cmd.Commande).AsEnumerable();
+
+            foreach (var c in R)
+            {
+                foreach (var cmd in c.Commande)
+                {
+                    Console.WriteLine($"{cmd.ID} {c.ID} {c.Nom} {cmd.QTE *cmd.PRU}");
+                }
+            }
 
             Console.ReadKey();
 

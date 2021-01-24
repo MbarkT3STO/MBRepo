@@ -20,7 +20,13 @@ namespace MBRepo
         /// <summary>
         /// Private DBContext property
         /// </summary>
-        private DbContext _Context { get; } = null;        
+        private DbContext _Context { get; } = null;
+
+
+        /// <summary>
+        /// Determine if Lazy Loading either activate or not
+        /// </summary>
+        private bool _LazyLoaded { get; set; }
 
         #endregion
 
@@ -29,9 +35,12 @@ namespace MBRepo
 
         #region Construcors
 
-        public Repo()
+
+        public Repo(bool LazyLoaded)
         {
-            _Context = new TContext();
+            _Context                                  = new TContext();
+            _LazyLoaded                               = LazyLoaded;
+            _Context.Configuration.LazyLoadingEnabled = LazyLoaded;
         }
 
 
